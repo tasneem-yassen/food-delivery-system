@@ -93,4 +93,4 @@ Main classes include:
 ---
 
 ## Academic Context
-Developed for the "Object-Oriented Programming" course at the University of Haifa. :contentReference[oaicite:2]{index=2}
+Developed for the "Object-Oriented Programming" course at the University of Haifa.
