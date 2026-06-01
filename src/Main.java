@@ -335,7 +335,7 @@ public class Main {
                 break;
 
             case 4:
-            	assignRiderToOrderFromInput(input, system);
+            	assignRiderToOrderFromInput(input, system, loggedAdmin);
                 break;
 
             case 0:
@@ -660,10 +660,10 @@ public class Main {
 		    if(input.hasNextDouble()) {
 		        rating = input.nextDouble();
 
-		        if(rating >= 0) {
+		        if(rating >= 0 && rating <= 5) {
 		            break;
 		        } else {
-		            System.out.println("Rating cannot be negative.");
+		            System.out.println("Rating must be between 0 and 5.");
 		        }
 		    } else {
 		        System.out.println("Invalid rating.");
@@ -1066,6 +1066,36 @@ public class Main {
 		system.assignRestAdminToRestaurant(userName, restaurantCode);
 		System.out.println("Restaurant assigned successfully.");
 	}
+	public static void assignRiderToOrderFromInput(Scanner input, DeliverySystem system, RestAdmin loggedAdmin) {
+		//this method assigns a rider to an existing order
+		System.out.println("Please enter rider id:");
+		String riderId = input.next();
+		while(system.findRiderById(riderId) == null ||
+				!system.findRiderById(riderId).isAvailable()) {
+			System.out.println("Rider does not exist or is not available.");
+			System.out.println("Please enter rider id:");
+			riderId = input.next();
+		}
+
+		System.out.println("Please enter order code:");
+		String orderCode = input.next();
+
+		while(system.findOrderByCode(orderCode) == null) {
+			System.out.println("Order does not exist.");
+			System.out.println("Please enter order code:");
+			orderCode = input.next();
+		}
+		Order order = system.findOrderByCode(orderCode);
+		if(!loggedAdmin.isResponsibleFor(order.getRestaurantCode())) {
+		    System.out.println("You are not responsible for this order's restaurant.");
+		    return;
+		}
+		if(system.assignRiderToOrder(riderId, orderCode)) {
+			System.out.println("Rider assigned successfully.");
+		}else {
+			System.out.println("Could not assign rider to order.");
+		}
+	}
 	public static void assignRiderToOrderFromInput(Scanner input, DeliverySystem system) {
 		//this method assigns a rider to an existing order
 		System.out.println("Please enter rider id:");
@@ -1085,7 +1115,6 @@ public class Main {
 			System.out.println("Please enter order code:");
 			orderCode = input.next();
 		}
-
 		if(system.assignRiderToOrder(riderId, orderCode)) {
 			System.out.println("Rider assigned successfully.");
 		}else {
