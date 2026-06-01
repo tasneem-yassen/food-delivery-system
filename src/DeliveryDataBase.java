@@ -318,6 +318,12 @@ public class DeliveryDataBase {
 			return false;
 		}
 		orders.add(other);
+		// update ordersByCustomer HashMap
+		addOrderToCustomer(other.getCustomerCode(), other);
+		// update restaurantsByCustomer Hashtable
+		updateRestaurantsByCustomer(other.getCustomerCode(), other.getRestaurant());
+		// update totalPaidByCustomer HashMap
+		updateTotalPaidByCustomer(other.getCustomerCode(), other.getFinalPrice());
 		return true;
 	}
 
@@ -361,6 +367,23 @@ public class DeliveryDataBase {
 		return admin.addRestaurant(restaurant);
 	}
 
+//////////////////////methods for customer////////////////////////////
+	public boolean updateCustomerPhone(String customerCode, String newPhone) {
+		Customer customer = findCustomerByCode(customerCode);
+		if (customer == null) {
+			return false;
+		}
+		return customer.setCustomerPhone(newPhone);
+	}
+
+	public boolean updateCustomerAddress(String customerCode, Address newAddress) {
+		Customer customer = findCustomerByCode(customerCode);
+		if (customer == null || newAddress == null) {
+			return false;
+		}
+		return customer.setAddress(newAddress);
+	}
+
 /////////////////// methods for orders//////////////////////////
 	public boolean markOrderDelivered(String orderCode, MyDate date) {
 		Order order = findOrderByCode(orderCode);
@@ -388,4 +411,141 @@ public class DeliveryDataBase {
 		return order.setOrderStatus("on the way");
 	}
 
+//////////////////////Login methods///////////////////////////
+	public boolean systemAdminLogin(String userName, String password) {
+		// return true if the admin login info is corrcet and false otherwise
+		if (userName == null || password == null) {
+			return false;
+		}
+		userName = userName.trim();
+		password = password.trim();
+		return systemAdministrator.getUserName().equals(userName) && systemAdministrator.getPassword().equals(password);
+	}
+
+	// if the restaurant admin login info is corrcet return restaurant admin and
+	// null otherwise
+	public RestAdmin restAdminLogin(String userName, String password) {
+		if (userName == null || password == null) {
+			return null;
+		}
+		userName = userName.trim();
+		password = password.trim();
+		for (RestAdmin restAdmin : restAdmins) {
+			if (restAdmin.getUserName().equals(userName) && restAdmin.getPassword().equals(password)) {
+				return restAdmin;
+			}
+		}
+		return null;
+	}
+
+	// if the rider login info is corrcet return rider and null otherwise
+	public Rider riderLogin(String id) {
+		if (id == null) {
+			return null;
+		}
+		id = id.trim();
+		for (Rider rider : riders) {
+			if (rider.getRiderId().equals(id)) {
+				return rider;
+			}
+		}
+		return null;
+	}
+
+	// if the customer login info is corrcet return customer and null otherwise
+	public Customer customerLogin(String code) {
+		if (code == null) {
+			return null;
+		}
+		code = code.trim();
+		for (Customer customer : customers) {
+			if (customer.getCustomerCode().equals(code)) {
+				return customer;
+			}
+		}
+		return null;
+	}
+
+//////////////////display helper methods//////////////////// 
+	public void printOrdersByRider(String riderCode) {
+		Rider rider = findRiderById(riderCode);
+		if (findRiderById(riderCode) == null) {
+			return;
+		}
+		for (Order order : rider.getOrders()) {
+			if (order.getRiderCode().equals(riderCode)) {
+				System.out.println(order);
+			}
+		}
+	}
+
+	public void printOrdersByCustomer(String customerCode) {
+		if (findCustomerByCode(customerCode) == null) {
+			return;
+		}
+		for (Order order : orders) {
+			if (order.getCustomerCode().equals(customerCode)) {
+				System.out.println(order);
+			}
+		}
+	}
+
+	public void printAllRestaurants() {
+		for (Restaurant restaurant : restaurants) {
+			System.out.println(restaurant);
+		}
+	}
+
+	public void printAllCustomers() {
+		for (Customer customer : customers) {
+			System.out.println(customer);
+		}
+	}
+
+	public void printAllRiders() {
+		for (Rider rider : riders) {
+			System.out.println(rider);
+		}
+	}
+
+	public void printAllRestAdmins() {
+		for (RestAdmin restAdmin : restAdmins) {
+			System.out.println(restAdmin);
+		}
+	}
+
+	public void printAllOrders() {
+		for (Order order : orders) {
+			System.out.println(order);
+		}
+	}
+
+///////////////helper methods/////////////////////
+	public boolean updateRestaurantsByCustomer(String customerCode, Restaurant restaurant) {
+		if (!InputValidation.isNotEmpty(customerCode) || restaurant == null) {
+			return false;
+		}
+		customerCode = customerCode.trim();
+		if (!restaurantsByCustomer.containsKey(customerCode)) {
+			restaurantsByCustomer.put(customerCode, new ArrayList<Restaurant>());
+		}
+		ArrayList<Restaurant> customerRestaurants = restaurantsByCustomer.get(customerCode);
+		if (!customerRestaurants.contains(restaurant)) {
+			customerRestaurants.add(restaurant);
+		}
+		return true;
+	}
+
+	public boolean updateTotalPaidByCustomer(String customerCode, double amount) {
+		if (!InputValidation.isNotEmpty(customerCode) || amount < 0) {
+			return false;
+		}
+		customerCode = customerCode.trim();
+		double currentTotal = 0;
+		if (totalPaidByCustomer.containsKey(customerCode)) {
+			currentTotal = totalPaidByCustomer.get(customerCode);
+		}
+		totalPaidByCustomer.put(customerCode, currentTotal + amount);
+		return true;
+	}
 }

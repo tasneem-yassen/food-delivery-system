@@ -3,7 +3,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		//create delivery system opject 
-		DeliverySystem system = new DeliverySystem(0, 0, 0,0, 0);
+		DeliveryDataBase system = new DeliveryDataBase();
 		//load intial system data
 		loadCustomers(system);
 		loadRestaurants(system);
@@ -58,7 +58,7 @@ public class Main {
 		}
 	}
 /////////////loading starting values/////////////////////////////////////////
-	public static boolean loadCustomers(DeliverySystem system) {
+	public static boolean loadCustomers(DeliveryDataBase system) {
 		//load intial cutomers into system 
 		boolean success = true;
 	    success = system.addCustomer(new Customer("1001", "Ahmad", "Ali",
@@ -93,7 +93,7 @@ public class Main {
 	            "0527654321", "yara@gmail.com", 770)) && success;
 	    return success;
 	}
-	public static boolean loadRestaurants(DeliverySystem system) {
+	public static boolean loadRestaurants(DeliveryDataBase system) {
 		//load intial restaurants into system
 		boolean success = true; 
 		// Regular restaurants
@@ -161,7 +161,7 @@ public class Main {
 	            "Seafood",4.8,true,31,170,12)) && success;
 	    return success;
 	}
-	public static boolean loadRiders(DeliverySystem system) {
+	public static boolean loadRiders(DeliveryDataBase system) {
 		//load intial riders into system
 		boolean success = true;
 		success = system.addRider(new Rider("123456789","Ahmad","Ali",
@@ -177,7 +177,7 @@ public class Main {
 
 		return success;
 	}
-	public static boolean loadRestAdmins(DeliverySystem system) {
+	public static boolean loadRestAdmins(DeliveryDataBase system) {
 		//load intial restaurant admins into system
 		boolean success = true;
 		success = system.addRestAdmin(new RestAdmin("Ahmad Ali",
@@ -189,7 +189,7 @@ public class Main {
 
 		return success;
 	}
-	public static boolean loadOrders(DeliverySystem system) {
+	public static boolean loadOrders(DeliveryDataBase system) {
 		//load intial orders into system
 		boolean success = true;
 		success = system.addOrder(new Order("3001","1001",system.findRestaurantByCode("2001"),
@@ -209,10 +209,27 @@ public class Main {
 				"2006","000",new MyDate(13,5,2026),new MyDate(13,5,2026),
 				220,"delivered")) && success;
 		success = system.assignRiderToOrder("159357486", "3005") && success;
+		success = system.addOrder(new Order("3006","1001",system.findRestaurantByCode("2021"),
+		        "2021","000",new MyDate(14,5,2026),new MyDate(0,0,0),
+		        180,"sent")) && success;
+		success = system.assignRiderToOrder("987654321", "3006") && success;
+		success = system.addOrder(new Order("3007","1002",system.findRestaurantByCode("2011"),
+		        "2011","000",new MyDate(14,5,2026),new MyDate(0,0,0),
+		        75,"on the way")) && success;
+		success = system.assignRiderToOrder("456789123", "3007") && success;
+		success = system.addOrder(new Order("3008","1001",system.findRestaurantByCode("2001"),
+		        "2001","000",new MyDate(15,5,2026),new MyDate(15,5,2026),
+		        95,"delivered")) && success;
+		success = system.addOrder(new Order("3009","1006",system.findRestaurantByCode("2023"),
+		        "2023","000",new MyDate(15,5,2026),new MyDate(0,0,0),
+		        250,"sent")) && success;
+		success = system.addOrder(new Order("3010","1002",system.findRestaurantByCode("2003"),
+		        "2003","000",new MyDate(16,5,2026),new MyDate(16,5,2026),
+		        120,"delivered")) && success;
 		return success;
 	}
 ///////////////// menu helper methods ///////////////////////////////////////////
-	public static void systemAdminMenu(Scanner input, DeliverySystem system) {
+	public static void systemAdminMenu(Scanner input, DeliveryDataBase system) {
 		//handles system admin menu
 		String userName, password;
 		boolean exitFlag = false;
@@ -282,7 +299,7 @@ public class Main {
 		}
 		
 	}	
-	public static void restaurantAdminMenu(Scanner input, DeliverySystem system) {
+	public static void restaurantAdminMenu(Scanner input, DeliveryDataBase system) {
 		//handles restaurant admin menu
 		String userName, password;
 		boolean exitFlag = false;
@@ -345,7 +362,7 @@ public class Main {
 			}
 		}
 	}
-	public static void riderMenu(Scanner input, DeliverySystem system) {
+	public static void riderMenu(Scanner input, DeliveryDataBase system) {
 		//handles rider menu
 		String id;
 		boolean exitFlag = false; 
@@ -397,7 +414,7 @@ public class Main {
 			}
 		}
 	}
-	public static void customerMenu(Scanner input, DeliverySystem system) {
+	public static void customerMenu(Scanner input, DeliveryDataBase system) {
 		//handles customer menu
 		String customerCode;
 		boolean exitFlag = false;
@@ -453,7 +470,7 @@ public class Main {
 		}
 	}
 //////////// helper methods//////////////////////////
-	public static void addCustomerFromInput(Scanner input, DeliverySystem system) {
+	public static void addCustomerFromInput(Scanner input, DeliveryDataBase system) {
 		// this method adds customer after validating users input 
 		System.out.println("Please enter the customers info:");
 		String code, firstName, familyName, city, street, zip;
@@ -563,7 +580,7 @@ public class Main {
 			System.out.println("Could not add customer");
 		}
 	}
-	public static void addRestaurantAdminFromInput(Scanner input, DeliverySystem system) {
+	public static void addRestaurantAdminFromInput(Scanner input, DeliveryDataBase system) {
 		// this method adds restaurant admin after validating users input
 		System.out.println("Please enter the restaurant admin info:");
 		String name, userName, password; 
@@ -605,7 +622,7 @@ public class Main {
 		}
 	}
 
-	public static void addRestaurantFromInput(Scanner input, DeliverySystem system) {
+	public static void addRestaurantFromInput(Scanner input, DeliveryDataBase system) {
 		// this method adds restaurant after validating users input
 		System.out.println("Please choose what kind of restaurant you would like to add:\n1: Regular restaurant\n2: Fast food restaurant\n3: Premium restaurant");
 		int choice = -1; 
@@ -771,7 +788,7 @@ public class Main {
 			System.out.println("Could not add restaurant.");
 		}
 	}
-	public static void addRiderFromInput(Scanner input, DeliverySystem system) {
+	public static void addRiderFromInput(Scanner input, DeliveryDataBase system) {
 		// this method adds rider after validating users input
 		System.out.println("Please enter your driver info: ");
 		String id, firstName, familyName, phoneNum, vehicle;
@@ -848,7 +865,7 @@ public class Main {
 			System.out.println("Could not add rider.");
 		}
 	}
-	public static void addOrderFromInput(Scanner input, DeliverySystem system, RestAdmin loggedAdmin) {
+	public static void addOrderFromInput(Scanner input, DeliveryDataBase system, RestAdmin loggedAdmin) {
 		// this method adds order after validating users input
 		System.out.println("Please enter order info: ");
 		String orderCode, customerCode, restaurantCode ;
@@ -953,7 +970,7 @@ public class Main {
 			System.out.println("Could not add order");
 		}
 	}
-	public static void addOrderFromInputCustomer(Scanner input,DeliverySystem system,Customer loggedCustomer) {
+	public static void addOrderFromInputCustomer(Scanner input,DeliveryDataBase system,Customer loggedCustomer) {
 		// this method allows the customer to add a new order after validating input 
 		System.out.println("Please enter order info: ");
 		String orderCode, restaurantCode ;
@@ -1044,7 +1061,7 @@ public class Main {
 		}
 		
 	}
-	public static void assignadminToRestaurantFromInput(Scanner input, DeliverySystem system) {
+	public static void assignadminToRestaurantFromInput(Scanner input, DeliveryDataBase system) {
 		//this method assigns an admin to an existing restaurant 
 		System.out.println("Please enter restaurant admin userName: ");
 		String userName;
@@ -1065,7 +1082,7 @@ public class Main {
 		system.assignRestAdminToRestaurant(userName, restaurantCode);
 		System.out.println("Restaurant assigned successfully.");
 	}
-	public static void assignRiderToOrderFromInput(Scanner input, DeliverySystem system, RestAdmin loggedAdmin) {
+	public static void assignRiderToOrderFromInput(Scanner input, DeliveryDataBase system, RestAdmin loggedAdmin) {
 		//this method assigns a rider to an existing order
 		System.out.println("Please enter rider id:");
 		String riderId = input.next();
@@ -1095,7 +1112,7 @@ public class Main {
 			System.out.println("Could not assign rider to order.");
 		}
 	}
-	public static void assignRiderToOrderFromInput(Scanner input, DeliverySystem system) {
+	public static void assignRiderToOrderFromInput(Scanner input, DeliveryDataBase system) {
 		//this method assigns a rider to an existing order
 		System.out.println("Please enter rider id:");
 		String riderId = input.next();
@@ -1120,7 +1137,7 @@ public class Main {
 			System.out.println("Could not assign rider to order.");
 		}
 	}
-	public static void updateOrderStatusToOnTheWay(Scanner input,DeliverySystem system,Rider loggedRider) {
+	public static void updateOrderStatusToOnTheWay(Scanner input,DeliveryDataBase system,Rider loggedRider) {
 		//this method updates order status to "on the way"
 		String orderCode ;
 		Order order;
@@ -1151,17 +1168,16 @@ public class Main {
 				System.out.println("order: "+ order);
 		}
 	}
-	public static void printAllOrdersForCustomer(DeliverySystem system,Customer loggedCustomer) {
+	public static void printAllOrdersForCustomer(DeliveryDataBase system,Customer loggedCustomer) {
 		//this method print all the orders that the customer have
 		String code = loggedCustomer.getCustomerCode();
-		Order[] orders = system.getOrders();
-		for (int i = 0; i < orders.length; i++) {
-			if(orders[i] != null && orders[i].getCustomerCode().equals(code)) {
-				System.out.println("order: "+orders[i]);
-			}
-		}
+		for (Order order : system.getOrders()) {
+	        if (order.getCustomerCode().equals(code)) {
+	            System.out.println("order: " + order);
+	        }
+	    }
 	}
-	public static void printRestaurantInfo(Scanner input,DeliverySystem system) {
+	public static void printRestaurantInfo(Scanner input,DeliveryDataBase system) {
 		//this method prints the restaurant info
 		String restaurantCode;
 		Restaurant restaurant = null;
@@ -1180,7 +1196,7 @@ public class Main {
 		}
 		System.out.println("restuarant info: "+ restaurant);
 	}
-	public static void updateOrderStatusToDelivered(Scanner input,DeliverySystem system,Rider loggedRider) {
+	public static void updateOrderStatusToDelivered(Scanner input,DeliveryDataBase system,Rider loggedRider) {
 		//this method updates order status to "delivered" and validates the delivery date
 		String orderCode;
 		Order order;
@@ -1237,7 +1253,7 @@ public class Main {
 			System.out.println("Could not update order status.");
 		}
 	}
-	public static void updateCustomerInfoFromInput(Scanner input, DeliverySystem system, Customer loggedCustomer) {
+	public static void updateCustomerInfoFromInput(Scanner input, DeliveryDataBase system, Customer loggedCustomer) {
 		//this method allowes the customer to update its own address and phone number 
 		int customerChoice = -1;
 		while(customerChoice != 0) {
@@ -1265,7 +1281,7 @@ public class Main {
 	        }
 		}
 	}
-	public static void updateCustomerAddress(Scanner input,DeliverySystem system,Customer loggedCustomer) {
+	public static void updateCustomerAddress(Scanner input,DeliveryDataBase system,Customer loggedCustomer) {
 		//this method is a helper for "updateCustomerInfoFromInput" to update the address
 		String city, street,zip; 
 		System.out.println("Please enter the new address: ");
@@ -1301,7 +1317,7 @@ public class Main {
 		loggedCustomer.setAddress(address);
 		System.out.println("Address updated successfully: ");
 	}
-	public static void updateCustomerPhone(Scanner input,DeliverySystem system,Customer loggedCustomer) {
+	public static void updateCustomerPhone(Scanner input,DeliveryDataBase system,Customer loggedCustomer) {
 		//this method is a helper for "updateCustomerInfoFromInput" to update the phone number
 		String phoneNumber;
 		while(true) {
