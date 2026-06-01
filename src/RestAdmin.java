@@ -1,21 +1,29 @@
-import java.util.Arrays;
-
+import java.util.ArrayList; 
 public class RestAdmin extends Admin {
-	protected Restaurant[] restaurants;
+	protected ArrayList<Restaurant> restaurants;
 	protected int count ;
 //////////////constructor////////////////////////
-	public RestAdmin(String name, String userName, String password, Restaurant[] restaurants, int count) {
+	public RestAdmin(String name, String userName, String password, ArrayList<Restaurant> restaurants, int count) {
 		super(name, userName, password);
-		setRestaurants(restaurants);
-		setCount(count);
+		if(!setRestaurants(restaurants)) {
+			this.restaurants = new ArrayList<Restaurant>(); 
+			this.count = 0; 
+		}
 	}
+	public RestAdmin(String name, String userName, String password) {
+		super(name, userName, password);
+		this.restaurants = new ArrayList<Restaurant>();
+        this.count = 0;
+	}
+
 ///////////////getters and setters////////////////////
-	public Restaurant[] getRestaurants() {
+	public ArrayList<Restaurant> getRestaurants() {
 		return restaurants;
 	}
-	public boolean setRestaurants(Restaurant[] restaurants) {
-		if(restaurants != null && restaurants.length > 0 ) {
+	public boolean setRestaurants(ArrayList<Restaurant> restaurants) {
+		if(restaurants != null) {
 			this.restaurants = restaurants;
+			this.count = restaurants.size();
 			return true;
 		}
 		return false ; 
@@ -26,7 +34,7 @@ public class RestAdmin extends Admin {
 	public boolean setCount(int count) {
 		if(this.restaurants == null)
 		    return false;
-		if(count < 0 || count > this.restaurants.length) {
+		if(count < 0 || count > this.restaurants.size()) {
 			return false; 
 		}
 		this.count = count;
@@ -35,28 +43,24 @@ public class RestAdmin extends Admin {
 /////////////toString////////////////
 	@Override
 	public String toString() {
-		return super.toString() + " ,RestAdmin: (restaurants: " + Arrays.toString(restaurants) 
+		return super.toString() + " ,RestAdmin: (restaurants: " + restaurants
 		+ ", count: " + count + ")";
 	}
 	public boolean addRestaurant(Restaurant restaurant) {
 		if(restaurant == null) {
 			return false;
 		}
-		if(count >= restaurants.length) {
+		if(restaurants.contains(restaurant)) {
 			return false; 
 		}
-		for(int i=0 ; i<count ;i++) {
-			if(restaurants[i].equals(restaurant)) {
-				return false; 
-			}
-		}
-		restaurants[count] = restaurant; 
-		count++;
+
+		restaurants.add(restaurant);
+		count = restaurants.size();
 		return true; 
 	}
 	public boolean isResponsibleFor(String restaurantCode) {
-		for(int i=0 ; i< count ; i++) {
-			if(restaurants[i].getRestaurantCode().equals(restaurantCode)) {
+		for(Restaurant restaurant : restaurants) {
+			if(restaurant.getRestaurantCode().equals(restaurantCode)) {
 				return true;
 			}
 		}

@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -166,15 +165,15 @@ public class Main {
 		//load intial riders into system
 		boolean success = true;
 		success = system.addRider(new Rider("123456789","Ahmad","Ali",
-				"0521234567","car",true,new Order[20],0)) && success;
+				"0521234567","car",true)) && success;
 		success = system.addRider(new Rider("987654321","Noa","Cohen",
-				"0532345678","bike",true,new Order[20],0)) && success;
+				"0532345678","bike",true)) && success;
 		success = system.addRider(new Rider("456789123","David","Levi",
-				"0543456789","motorBike",true,new Order[20],0)) && success;
+				"0543456789","motorBike",true)) && success;
 		success = system.addRider(new Rider("741852963","Lina","Haddad",
-				"0554567890","car",false,new Order[20],0)) && success;
+				"0554567890","car",false)) && success;
 		success = system.addRider(new Rider("159357486","Omar","Nassar",
-				"0565678901","bike",true,new Order[20],0)) && success;
+				"0565678901","bike",true)) && success;
 
 		return success;
 	}
@@ -182,11 +181,11 @@ public class Main {
 		//load intial restaurant admins into system
 		boolean success = true;
 		success = system.addRestAdmin(new RestAdmin("Ahmad Ali",
-				"ahmadAdmin","1234",new Restaurant[10],0)) && success;
+				"ahmadAdmin","1234")) && success;
 		success = system.addRestAdmin(new RestAdmin("Noa Cohen",
-				"noaAdmin","5678",new Restaurant[10],0)) && success;
+				"noaAdmin","5678")) && success;
 		success = system.addRestAdmin(new RestAdmin("David Levi",
-				"davidAdmin","9999",new Restaurant[10],0)) && success;
+				"davidAdmin","9999")) && success;
 
 		return success;
 	}
@@ -598,7 +597,7 @@ public class Main {
 				break;
 			}
 		}
-		RestAdmin restAdmin = new RestAdmin(name, userName, password, new Restaurant[10], 0);
+		RestAdmin restAdmin = new RestAdmin(name, userName, password);
 		if(system.addRestAdmin(restAdmin)) {
 		    System.out.println("Restaurant admin added successfully.");
 		} else {
@@ -841,7 +840,7 @@ public class Main {
 		}
 
 		Rider rider = new Rider(id, firstName, familyName,
-				phoneNum, vehicle, true, new Order[20], 0);
+				phoneNum, vehicle, true);
 
 		if(system.addRider(rider)) {
 			System.out.println("Rider added successfully.");
@@ -1148,11 +1147,8 @@ public class Main {
 	}
 	public static void printOrdersByRider(Rider loggedRider) {
 		//this method prints all the orders that belong to the rider
-		Order[] orders = loggedRider.getOrders();
-		for (int i = 0; i < orders.length; i++) {
-			if(orders[i] != null) {
-				System.out.println("order: "+orders[i]);
-			}
+		for (Order order : loggedRider.getOrders()) {
+				System.out.println("order: "+ order);
 		}
 	}
 	public static void printAllOrdersForCustomer(DeliverySystem system,Customer loggedCustomer) {

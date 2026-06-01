@@ -1,3 +1,4 @@
+import java.util.ArrayList; 
 public class Rider {
 	private String riderId;
 	private String riderFirstName; 
@@ -5,20 +6,35 @@ public class Rider {
 	private String riderPhone; 
 	private String vehicle; 
 	private boolean isAvailable; // true if the rider is avilable and false otherwise 
-	private Order[] orders; // array of orders for the rider 
+	private ArrayList<Order> orders; //an array list for the riders orders
 	private int orderCount; // amount of orders the rider has 
 /////////////constructor///////////// 
 	public Rider(String riderId, String riderFirstName, String riderFamilyName, String riderPhone, String vehicle,
-			boolean isAvailable, Order[] orders, int orderCount) {
+			boolean isAvailable, ArrayList<Order> orders) {
+		setRiderId(riderId);
+		setRiderFirstName(riderFirstName);
+		setRiderFamilyName(riderFamilyName);
+		setRiderPhone(riderPhone);
+		setVehicle(vehicle);
+		setAvailable(isAvailable); 
+		if(!setOrders(orders)) {
+			this.orders = new ArrayList<Order>();
+			this.orderCount = 0; 
+		}
+	}
+	
+	public Rider(String riderId, String riderFirstName, String riderFamilyName, String riderPhone, String vehicle,
+			boolean isAvailable) {
 		setRiderId(riderId);
 		setRiderFirstName(riderFirstName);
 		setRiderFamilyName(riderFamilyName);
 		setRiderPhone(riderPhone);
 		setVehicle(vehicle);
 		setAvailable(isAvailable);
-		setOrders(orders); 
-		setOrderCount(orderCount);
+		this.orders = new ArrayList<Order>();
+		this.orderCount = 0 ;
 	}
+
 ////////////////getters and setters///////////////// 
 	public String getRiderId() {
 		return riderId;
@@ -93,12 +109,13 @@ public class Rider {
 	public void setAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	public Order[] getOrders() {
+	public ArrayList<Order>  getOrders() {
 		return orders;
 	}
-	public boolean setOrders(Order[] orders) {
-		if(orders != null && orders.length != 0) {
+	public boolean setOrders(ArrayList<Order> orders) {
+		if(orders != null) {
 			this.orders = orders;
+			this.orderCount = orders.size();
 			return true;
 		}
 		return false;
@@ -110,7 +127,7 @@ public class Rider {
 		if(this.orders == null) {
 			return false;
 		}
-		if(orderCount < 0 || orderCount > this.orders.length) {
+		if(orderCount < 0 || orderCount > this.orders.size()) {
 			return false;
 		}
 		this.orderCount = orderCount;

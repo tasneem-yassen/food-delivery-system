@@ -1,5 +1,4 @@
 import java.util.Arrays;
-
 public class DeliverySystem {
 	private Customer[] customers;
 	private RestAdmin[] restAdmins;
@@ -224,14 +223,8 @@ public class DeliverySystem {
 			return false;
 		}
 		order.setRiderCode(rider.getRiderId());
-		Order[] riderOrders = rider.getOrders();
-		int count = rider.getOrderCount();
-		if(count >= riderOrders.length) {
-			riderOrders = Arrays.copyOf(riderOrders, riderOrders.length +1);
-		}
-		riderOrders[count] = order; 
-		rider.setOrders(riderOrders);
-		rider.setOrderCount(count+1);
+		rider.getOrders().add(order);
+		rider.setOrderCount(rider.getOrders().size()); 
 		rider.setAvailable(false);
 		return true; 
 	}
