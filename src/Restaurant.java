@@ -57,7 +57,7 @@ public class Restaurant {
 	}
 	public boolean setRestaurantRating(double restaurantRating) {
 		// check if the rating is positive or 0 
-		if(restaurantRating < 0) {
+		if(restaurantRating < 0 || restaurantRating > 5) {
 			return false;
 		}
 		this.restaurantRating = restaurantRating;

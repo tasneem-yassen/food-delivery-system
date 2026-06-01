@@ -352,6 +352,7 @@ public class DeliveryDataBase {
 			return false;
 		}
 		order.setRiderCode(rider.getRiderId());
+		order.setOrderStatus("sent");
 		rider.getOrders().add(order);
 		rider.setOrderCount(rider.getOrders().size());
 		rider.setAvailable(false);
@@ -469,7 +470,7 @@ public class DeliveryDataBase {
 //////////////////display helper methods//////////////////// 
 	public void printOrdersByRider(String riderCode) {
 		Rider rider = findRiderById(riderCode);
-		if (findRiderById(riderCode) == null) {
+		if (rider == null) {
 			return;
 		}
 		for (Order order : rider.getOrders()) {
