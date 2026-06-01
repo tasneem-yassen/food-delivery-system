@@ -65,204 +65,204 @@ public class DeliverySystem {
 		return orderCount;
 	}
 /////////////////finding opjects by code or id methods///////////////
-	public Customer findCustomerByCode(String code) {
-		if(!InputValidation.isNotEmpty(code)) {
-			return null;
-		}
-		code = code.trim();
-		for(int i = 0; i < customerCount; i++) {
-			if(customers[i].getCustomerCode().equals(code)) {
-				return customers[i];
-			}
-		}
-		return null;
-	}
-	public Restaurant findRestaurantByCode(String code) {
-		if(!InputValidation.isNotEmpty(code)) {
-			return null;
-		}
-		code = code.trim();
-		for(int i = 0; i < restaurantCount; i++) {
-			if(restaurants[i].getRestaurantCode().equals(code)) {
-				return restaurants[i];
-			}
-		}
-		return null;
-	}
-	public Rider findRiderById(String id) {
-		if(!InputValidation.isNotEmpty(id)) {
-			return null;
-		}
-		id = id.trim();
-		for(int i = 0; i < riderCount; i++) {
-			if(riders[i].getRiderId().equals(id)) {
-				return riders[i];
-			}
-		}
-		return null;
-	}
-	public Order findOrderByCode(String code) {
-		if(!InputValidation.isNotEmpty(code)) {
-			return null;
-		}
-		code = code.trim();
-		for(int i = 0; i < orderCount; i++) {
-			if(orders[i].getOrderCode().equals(code)) {
-				return orders[i];
-			}
-		}
-		return null;
-	}
-	public RestAdmin findRestAdminByUserName(String userName) {
-		if(!InputValidation.isNotEmpty(userName)) {
-			return null;
-		}
-		userName = userName.trim();
-		for(int i = 0; i < restAdminCount; i++) {
-			if(restAdmins[i].getUserName().equals(userName)) {
-				return restAdmins[i];
-			}
-		}
-		return null;
-	}
-	public Rider findAvailableRider() {
-		for(int i=0 ; i<riderCount;i++) {
-			if(riders[i].isAvailable()) {
-				return riders[i];
-			}
-		}
-		return null;
-	}
-///////////////// adding opjects methods//////////////////////
-	public boolean addCustomer(Customer other) {
-		if(other == null) {
-			return false;
-		}
-		//resize customers array if full
-		if(customerCount >= customers.length) {
-			customers = Arrays.copyOf(customers, customers.length + 1);
-		}
-		if(findCustomerByCode(other.getCustomerCode()) != null) {
-			return false;
-		}
-		customers[customerCount]= other;
-		customerCount++ ; 
-		return true; 
-	}
-	public boolean addRestaurant(Restaurant other) {
-		if(other == null) {
-			return false;
-		}
-		//resize restaurants array if full  
-		if(restaurantCount >= restaurants.length) {
-			restaurants = Arrays.copyOf(restaurants, restaurants.length + 1);
-		}
-		if(findRestaurantByCode(other.getRestaurantCode()) != null) {
-			return false;
-		}
-		restaurants[restaurantCount]= other;
-		restaurantCount++ ; 
-		return true; 
-	}
-	public boolean addRider(Rider other) {
-		if(other == null) {
-			return false;
-		}
-		//resize oreders array if full
-		if(riderCount >= riders.length) {
-			riders = Arrays.copyOf(riders, riders.length + 1);
-		}
-		if(findRiderById(other.getRiderId()) != null) {
-			return false;
-		}
-		riders[riderCount]= other;
-		riderCount++ ; 
-		return true; 
-	}
-	public boolean addOrder(Order other) {
-		if(other == null) {
-			return false;
-		}
-		//resize orders array if full
-		if(orderCount >= orders.length) {
-			orders = Arrays.copyOf(orders, orders.length + 1);
-		}
-		if(findOrderByCode(other.getOrderCode()) != null) {
-			return false;
-		}
-		orders[orderCount]= other;
-		orderCount++ ; 
-		return true; 
-	}
-	public boolean addRestAdmin(RestAdmin other) {
-		if(other == null) {
-			return false;
-		}
-		//resize restaurant admin array if full
-		if(restAdminCount >= restAdmins.length) {
-			restAdmins = Arrays.copyOf(restAdmins, restAdmins.length + 1);
-		}
-		if(findRestAdminByUserName(other.getUserName()) != null) {
-			return false;
-		}
-		restAdmins[restAdminCount]= other;
-		restAdminCount++ ; 
-		return true; 
-	}
-/////////////////assigning methods ////////////////////////////
-	public boolean assignRiderToOrder(String riderId , String orderCode) {
-		Rider rider = findRiderById(riderId);
-		Order order = findOrderByCode(orderCode);
-		if(rider == null || order == null) {
-			return false; 
-		}
-		if(!rider.isAvailable()) {
-			return false;
-		}
-		if(order.getRiderCode() != null && !order.getRiderCode().equals("000")) {
-			return false;
-		}
-		order.setRiderCode(rider.getRiderId());
-		rider.getOrders().add(order);
-		rider.setOrderCount(rider.getOrders().size()); 
-		rider.setAvailable(false);
-		return true; 
-	}
-	
-	public boolean assignRestAdminToRestaurant(String userName, String restaurantCode) {
-		RestAdmin admin = findRestAdminByUserName(userName);
-		Restaurant restaurant = findRestaurantByCode(restaurantCode);
-		if(admin == null || restaurant == null) {
-			return false;
-		}
-		return admin.addRestaurant(restaurant);
-	}
-/////////////////// methods for orders//////////////////////////
-	public boolean markOrderDelivered(String orderCode, MyDate date) {
-		Order order = findOrderByCode(orderCode);
-		if(order == null) {
-			return false;
-		}
-		if(!order.setOrderStatus("delivered")) {
-			return false;
-		}
-		if(!order.setDeliveryDate(date)) {
-			return false; 
-		}
-		Rider rider = findRiderById(order.getRiderCode());
-		if(rider != null) {
-			rider.setAvailable(true);
-		}
-		return true; 
-	}
-	public boolean markOrderOnTheWay(String orderCode) {
-		Order order = findOrderByCode(orderCode);
-		if(order == null) {
-			return false;
-		}
-		return order.setOrderStatus("on the way"); 
-	}
-	
+//	public Customer findCustomerByCode(String code) {
+//		if(!InputValidation.isNotEmpty(code)) {
+//			return null;
+//		}
+//		code = code.trim();
+//		for(int i = 0; i < customerCount; i++) {
+//			if(customers[i].getCustomerCode().equals(code)) {
+//				return customers[i];
+//			}
+//		}
+//		return null;
+//	}
+//	public Restaurant findRestaurantByCode(String code) {
+//		if(!InputValidation.isNotEmpty(code)) {
+//			return null;
+//		}
+//		code = code.trim();
+//		for(int i = 0; i < restaurantCount; i++) {
+//			if(restaurants[i].getRestaurantCode().equals(code)) {
+//				return restaurants[i];
+//			}
+//		}
+//		return null;
+//	}
+//	public Rider findRiderById(String id) {
+//		if(!InputValidation.isNotEmpty(id)) {
+//			return null;
+//		}
+//		id = id.trim();
+//		for(int i = 0; i < riderCount; i++) {
+//			if(riders[i].getRiderId().equals(id)) {
+//				return riders[i];
+//			}
+//		}
+//		return null;
+//	}
+//	public Order findOrderByCode(String code) {
+//		if(!InputValidation.isNotEmpty(code)) {
+//			return null;
+//		}
+//		code = code.trim();
+//		for(int i = 0; i < orderCount; i++) {
+//			if(orders[i].getOrderCode().equals(code)) {
+//				return orders[i];
+//			}
+//		}
+//		return null;
+//	}
+//	public RestAdmin findRestAdminByUserName(String userName) {
+//		if(!InputValidation.isNotEmpty(userName)) {
+//			return null;
+//		}
+//		userName = userName.trim();
+//		for(int i = 0; i < restAdminCount; i++) {
+//			if(restAdmins[i].getUserName().equals(userName)) {
+//				return restAdmins[i];
+//			}
+//		}
+//		return null;
+//	}
+//	public Rider findAvailableRider() {
+//		for(int i=0 ; i<riderCount;i++) {
+//			if(riders[i].isAvailable()) {
+//				return riders[i];
+//			}
+//		}
+//		return null;
+//	}
+/////////////////// adding opjects methods//////////////////////
+//	public boolean addCustomer(Customer other) {
+//		if(other == null) {
+//			return false;
+//		}
+//		//resize customers array if full
+//		if(customerCount >= customers.length) {
+//			customers = Arrays.copyOf(customers, customers.length + 1);
+//		}
+//		if(findCustomerByCode(other.getCustomerCode()) != null) {
+//			return false;
+//		}
+//		customers[customerCount]= other;
+//		customerCount++ ; 
+//		return true; 
+//	}
+//	public boolean addRestaurant(Restaurant other) {
+//		if(other == null) {
+//			return false;
+//		}
+//		//resize restaurants array if full  
+//		if(restaurantCount >= restaurants.length) {
+//			restaurants = Arrays.copyOf(restaurants, restaurants.length + 1);
+//		}
+//		if(findRestaurantByCode(other.getRestaurantCode()) != null) {
+//			return false;
+//		}
+//		restaurants[restaurantCount]= other;
+//		restaurantCount++ ; 
+//		return true; 
+//	}
+//	public boolean addRider(Rider other) {
+//		if(other == null) {
+//			return false;
+//		}
+//		//resize oreders array if full
+//		if(riderCount >= riders.length) {
+//			riders = Arrays.copyOf(riders, riders.length + 1);
+//		}
+//		if(findRiderById(other.getRiderId()) != null) {
+//			return false;
+//		}
+//		riders[riderCount]= other;
+//		riderCount++ ; 
+//		return true; 
+//	}
+//	public boolean addOrder(Order other) {
+//		if(other == null) {
+//			return false;
+//		}
+//		//resize orders array if full
+//		if(orderCount >= orders.length) {
+//			orders = Arrays.copyOf(orders, orders.length + 1);
+//		}
+//		if(findOrderByCode(other.getOrderCode()) != null) {
+//			return false;
+//		}
+//		orders[orderCount]= other;
+//		orderCount++ ; 
+//		return true; 
+//	}
+//	public boolean addRestAdmin(RestAdmin other) {
+//		if(other == null) {
+//			return false;
+//		}
+//		//resize restaurant admin array if full
+//		if(restAdminCount >= restAdmins.length) {
+//			restAdmins = Arrays.copyOf(restAdmins, restAdmins.length + 1);
+//		}
+//		if(findRestAdminByUserName(other.getUserName()) != null) {
+//			return false;
+//		}
+//		restAdmins[restAdminCount]= other;
+//		restAdminCount++ ; 
+//		return true; 
+//	}
+///////////////////assigning methods ////////////////////////////
+//	public boolean assignRiderToOrder(String riderId , String orderCode) {
+//		Rider rider = findRiderById(riderId);
+//		Order order = findOrderByCode(orderCode);
+//		if(rider == null || order == null) {
+//			return false; 
+//		}
+//		if(!rider.isAvailable()) {
+//			return false;
+//		}
+//		if(order.getRiderCode() != null && !order.getRiderCode().equals("000")) {
+//			return false;
+//		}
+//		order.setRiderCode(rider.getRiderId());
+//		rider.getOrders().add(order);
+//		rider.setOrderCount(rider.getOrders().size()); 
+//		rider.setAvailable(false);
+//		return true; 
+//	}
+//	
+//	public boolean assignRestAdminToRestaurant(String userName, String restaurantCode) {
+//		RestAdmin admin = findRestAdminByUserName(userName);
+//		Restaurant restaurant = findRestaurantByCode(restaurantCode);
+//		if(admin == null || restaurant == null) {
+//			return false;
+//		}
+//		return admin.addRestaurant(restaurant);
+//	}
+///////////////////// methods for orders//////////////////////////
+//	public boolean markOrderDelivered(String orderCode, MyDate date) {
+//		Order order = findOrderByCode(orderCode);
+//		if(order == null) {
+//			return false;
+//		}
+//		if(!order.setOrderStatus("delivered")) {
+//			return false;
+//		}
+//		if(!order.setDeliveryDate(date)) {
+//			return false; 
+//		}
+//		Rider rider = findRiderById(order.getRiderCode());
+//		if(rider != null) {
+//			rider.setAvailable(true);
+//		}
+//		return true; 
+//	}
+//	public boolean markOrderOnTheWay(String orderCode) {
+//		Order order = findOrderByCode(orderCode);
+//		if(order == null) {
+//			return false;
+//		}
+//		return order.setOrderStatus("on the way"); 
+//	}
+//	
 //////////////////////methods for customer////////////////////////////
 	public boolean updateCustomerPhone(String customerCode, String newPhone) {
 		Customer customer = findCustomerByCode(customerCode);
