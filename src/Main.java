@@ -398,7 +398,7 @@ public class Main {
 				break;
 			case 3:
 				printActiveOrdersByRider(system, loggedRider);
-				break; 
+				break;
 			case 4:
 				printOrdersByRider(loggedRider);
 				break;
@@ -469,7 +469,7 @@ public class Main {
 				System.out.println("Current balance: " + loggedCustomer.getRefundBalance());
 				break;
 			case 8:
-				loadMoneyToCustomer(input, loggedCustomer);
+				loadMoneyToCustomer(input, system, loggedCustomer);
 				break;
 			case 9:
 				withdrawMoneyFromCustomer(input, loggedCustomer);
@@ -1266,7 +1266,7 @@ public class Main {
 		int customerChoice = -1;
 		while (customerChoice != 0) {
 			System.out.println(
-					"Please choose what you would like to update:" + "\n1: Adress\n2: Phone number\n0: go back");
+					"Please choose what you would like to update:" + "\n1: Adress\n2: Phone number\n3: email\n0: go back");
 			if (input.hasNextInt()) {
 				customerChoice = input.nextInt();
 			} else {
@@ -1281,6 +1281,8 @@ public class Main {
 			case 2:
 				updateCustomerPhone(input, system, loggedCustomer);
 				break;
+			case 3:
+				updateCustomerEmail(input, system, loggedCustomer);
 			case 0:
 				break;
 			default:
@@ -1342,6 +1344,25 @@ public class Main {
 					break;
 				} else {
 					System.out.println("Invalid phone number, try again: ");
+				}
+			}
+		}
+	}
+	public static void updateCustomerEmail(Scanner input, DeliveryDataBase system, Customer loggedCustomer) {
+		// this method is a helper for "updateCustomerInfoFromInput" to update the phone
+		// email
+		String email;
+		while(true) {
+			System.out.println("Enter email:");
+			email = input.next();
+			if(!InputValidation.isNotEmpty(email) || !InputValidation.isValidEmail(email)) {
+				System.out.println("Invalid email, try again: ");
+			}else {
+				if(loggedCustomer.setCustomerMail(email)) {
+					System.out.println("Email updated successfully");
+					break;
+				}else {
+					System.out.println("Invalid email, try again:");
 				}
 			}
 		}
@@ -1426,14 +1447,81 @@ public class Main {
 			System.out.println(restaurant);
 		}
 	}
+
 	public static void printActiveOrdersByRider(DeliveryDataBase system, Rider loggedRider) {
 		ArrayList<Order> activeOrders = system.getActiveOrdersByRider(loggedRider.getRiderId());
-		if(activeOrders.isEmpty()) {
+		if (activeOrders.isEmpty()) {
 			System.out.println("No active orders found");
-			return; 
+			return;
 		}
-		for(Order order : activeOrders) {
+		for (Order order : activeOrders) {
 			System.out.println(order);
 		}
+	}
+
+	public static void printRestaurantsOrderedByCustomer(DeliveryDataBase system, Customer loggedCustomer) {
+		ArrayList<Restaurant> restaurants = system.getRestaurantsByCustomer().get(loggedCustomer.getCustomerCode());
+		if (restaurants == null || restaurants.isEmpty()) {
+			System.out.println("No restaurant found.");
+			return;
+		}
+		for (Restaurant restaurant : restaurants) {
+			System.out.println(restaurant);
+		}
+	}
+
+	public static void printPremiumRestaurantsByCustomer(DeliveryDataBase system, Customer loggedCustomer) {
+		ArrayList<Restaurant> restaurants = system.getPremiumRestaurantsByCustomer(loggedCustomer);
+		if (restaurants == null || restaurants.isEmpty()) {
+			System.out.println("No premium restaurants found.");
+			return;
+		}
+		for (Restaurant restaurant : restaurants) {
+			System.out.println(restaurant);
+		}
+	}
+
+	public static void loadMoneyToCustomer(Scanner input, DeliveryDataBase system, Customer loggedCustomer) {
+		double amount;
+		while (true) {
+			System.out.println("Enter amount to load:");
+			if (input.hasNextDouble()) {
+				amount = input.nextDouble();
+				if (amount > 0) {
+					break;
+				} else {
+					System.out.println("Amount must be positive.");
+				}
+			} else {
+				System.out.println("Invalid amount.");
+				input.next();
+			}
+		}
+		loggedCustomer.setRefundBalance(loggedCustomer.getRefundBalance() + amount);
+		System.out.println("Money loaded successfully.");
+		System.out.println("Current balance: " + loggedCustomer.getRefundBalance());
+	}
+
+	public static void withdrawMoneyFromCustomer(Scanner input, Customer loggedCustomer) {
+		double amount;
+		while (true) {
+			System.out.println("Enter amount to withdraw:");
+			if (input.hasNextDouble()) {
+				amount = input.nextDouble();
+				if (amount <= 0) {
+					System.out.println("Amount must be positive.");
+				} else if (amount > loggedCustomer.getRefundBalance()) {
+					System.out.println("Not enough balance.");
+				} else {
+					break;
+				}
+			} else {
+				System.out.println("invalid amount");
+				input.next();
+			}
+		}
+		loggedCustomer.setRefundBalance(loggedCustomer.getRefundBalance() - amount);
+		System.out.println("Money withdrawn successfully.");
+		System.out.println("Current balance: " + loggedCustomer.getRefundBalance());
 	}
 }
