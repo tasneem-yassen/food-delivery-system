@@ -437,7 +437,7 @@ public class Main {
 			System.out.println("Welcome customer\nPlease choose action: ");
 			System.out.println("1: add new order\n2: show all orders\n3: show restaurant info by code"
 					+ "\n4: update personal info\n5: show restaurants ordered from\n"
-					+ "6: show premium restaurants ordered from\n7: show palance\n"
+					+ "6: show premium restaurants ordered from\n7: show balance\n"
 					+ "8: load money\n9: withdraw money\n0: go back");
 			if (input.hasNextInt()) {
 				customerChoice = input.nextInt();
