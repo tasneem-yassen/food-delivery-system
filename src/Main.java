@@ -1369,6 +1369,7 @@ public class Main {
 	}
 
 	public static void updateRestaurantStatusFromInput(Scanner input, DeliveryDataBase system) {
+		//this method updates the restaurant status : open or closed . 
 		Restaurant restaurant;
 		while (true) {
 			System.out.println("restaurant code:");
@@ -1396,6 +1397,7 @@ public class Main {
 	}
 
 	public static void printOrdersByRestaurantFromInput(Scanner input, DeliveryDataBase system, RestAdmin loggedAdmin) {
+		//this method print all the customers orders from a restaurant 
 		Restaurant restaurant;
 		String restaurantCode;
 		while (true) {
@@ -1427,6 +1429,7 @@ public class Main {
 	}
 
 	public static void printOpenRestaurantsByCuisineFromInput(Scanner input, DeliveryDataBase system) {
+		//this method prints all open restaurants from a certain cuisine 
 		String cuisine;
 		input.nextLine();
 		while (true) {
@@ -1449,6 +1452,7 @@ public class Main {
 	}
 
 	public static void printActiveOrdersByRider(DeliveryDataBase system, Rider loggedRider) {
+		//this method prints the riders active orders (not delivered yet)
 		ArrayList<Order> activeOrders = system.getActiveOrdersByRider(loggedRider.getRiderId());
 		if (activeOrders.isEmpty()) {
 			System.out.println("No active orders found");
@@ -1460,6 +1464,7 @@ public class Main {
 	}
 
 	public static void printRestaurantsOrderedByCustomer(DeliveryDataBase system, Customer loggedCustomer) {
+		//this method prints the restaurants that the customer has ordered from before 
 		ArrayList<Restaurant> restaurants = system.getRestaurantsByCustomer().get(loggedCustomer.getCustomerCode());
 		if (restaurants == null || restaurants.isEmpty()) {
 			System.out.println("No restaurant found.");
@@ -1471,6 +1476,7 @@ public class Main {
 	}
 
 	public static void printPremiumRestaurantsByCustomer(DeliveryDataBase system, Customer loggedCustomer) {
+		//this method prints the premium restaurants that the customer has ordered from before
 		ArrayList<Restaurant> restaurants = system.getPremiumRestaurantsByCustomer(loggedCustomer);
 		if (restaurants == null || restaurants.isEmpty()) {
 			System.out.println("No premium restaurants found.");
@@ -1482,6 +1488,7 @@ public class Main {
 	}
 
 	public static void loadMoneyToCustomer(Scanner input, DeliveryDataBase system, Customer loggedCustomer) {
+		//this method allowes the customer to add money into their palance 
 		double amount;
 		while (true) {
 			System.out.println("Enter amount to load:");
@@ -1503,6 +1510,7 @@ public class Main {
 	}
 
 	public static void withdrawMoneyFromCustomer(Scanner input, Customer loggedCustomer) {
+		//this method allowes the customer to withdraw money into their palance
 		double amount;
 		while (true) {
 			System.out.println("Enter amount to withdraw:");
