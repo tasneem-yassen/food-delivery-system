@@ -103,5 +103,5 @@ public class Restaurant {
 		Restaurant other = (Restaurant)obj;
 		return this.restaurantCode.equals(other.restaurantCode);
 	}
-	
+
 }

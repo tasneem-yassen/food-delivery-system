@@ -484,10 +484,12 @@ public class DeliveryDataBase {
 		if (findCustomerByCode(customerCode) == null) {
 			return;
 		}
-		for (Order order : orders) {
-			if (order.getCustomerCode().equals(customerCode)) {
-				System.out.println(order);
-			}
+		ArrayList<Order> customerOrders = ordersByCustomer.get(customerCode);
+		if(customerOrders == null || customerOrders.isEmpty()) {
+			return; 
+		}
+		for (Order order : customerOrders) {
+			System.out.println(order);
 		}
 	}
 

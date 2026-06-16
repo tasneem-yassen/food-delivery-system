@@ -1,5 +1,6 @@
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 public class Main {
 
@@ -171,30 +172,59 @@ public class Main {
 	public static boolean loadOrders(DeliveryDataBase system) {
 		// load intial orders into system
 		boolean success = true;
-		success = system.addOrder(new Order("3001", "1001", system.findRestaurantByCode("2001"), "2001", "000",
-				new MyDate(10, 5, 2026), new MyDate(0, 0, 0), 85, "sent")) && success;
+		Order o1 = new Order("3001", "1001", system.findRestaurantByCode("2001"), "2001", "000",
+				new MyDate(10, 5, 2026), new MyDate(0, 0, 0), 85, "");
+		success = system.addOrder(o1) && success; 
 		success = system.assignRiderToOrder("123456789", "3001") && success;
-		success = system.addOrder(new Order("3002", "1002", system.findRestaurantByCode("2003"), "2003", "000",
-				new MyDate(11, 5, 2026), new MyDate(12, 5, 2026), 140, "delivered")) && success;
-		success = system.addOrder(new Order("3003", "1003", system.findRestaurantByCode("2005"), "2005", "000",
-				new MyDate(12, 5, 2026), new MyDate(0, 0, 0), 60, "sent")) && success;
-		success = system.addOrder(new Order("3004", "1004", system.findRestaurantByCode("2002"), "2002", "000",
-				new MyDate(13, 5, 2026), new MyDate(0, 0, 0), 95, "on the way")) && success;
-		success = system.addOrder(new Order("3005", "1005", system.findRestaurantByCode("2006"), "2006", "000",
-				new MyDate(13, 5, 2026), new MyDate(13, 5, 2026), 220, "delivered")) && success;
-		success = system.assignRiderToOrder("159357486", "3005") && success;
-		success = system.addOrder(new Order("3006", "1001", system.findRestaurantByCode("2021"), "2021", "000",
-				new MyDate(14, 5, 2026), new MyDate(0, 0, 0), 180, "sent")) && success;
-		success = system.assignRiderToOrder("987654321", "3006") && success;
-		success = system.addOrder(new Order("3007", "1002", system.findRestaurantByCode("2011"), "2011", "000",
-				new MyDate(14, 5, 2026), new MyDate(0, 0, 0), 75, "on the way")) && success;
-		success = system.assignRiderToOrder("456789123", "3007") && success;
-		success = system.addOrder(new Order("3008", "1001", system.findRestaurantByCode("2001"), "2001", "000",
-				new MyDate(15, 5, 2026), new MyDate(15, 5, 2026), 95, "delivered")) && success;
-		success = system.addOrder(new Order("3009", "1006", system.findRestaurantByCode("2023"), "2023", "000",
-				new MyDate(15, 5, 2026), new MyDate(0, 0, 0), 250, "sent")) && success;
-		success = system.addOrder(new Order("3010", "1002", system.findRestaurantByCode("2003"), "2003", "000",
-				new MyDate(16, 5, 2026), new MyDate(16, 5, 2026), 120, "delivered")) && success;
+		
+		Order o2 = new Order("3002", "1002", system.findRestaurantByCode("2003"), "2003", "000",
+				new MyDate(11, 5, 2026), new MyDate(12, 5, 2026), 140, "");
+		success = system.addOrder(o2) && success;
+		success = system.assignRiderToOrder("159357486", "3002") && success;
+		o2.setOrderStatus("delivered");
+		system.findRiderById("159357486").setAvailable(true);
+		
+		Order o3 = new Order("3003", "1003", system.findRestaurantByCode("2005"), "2005", "000",
+				new MyDate(12, 5, 2026), new MyDate(0, 0, 0), 60, "");
+		success = system.addOrder(o3) && success;
+		success = system.assignRiderToOrder("159357486", "3003") && success;
+		
+		Order o4 = new Order("3004", "1004", system.findRestaurantByCode("2002"), "2002", "000",
+				new MyDate(13, 5, 2026), new MyDate(0, 0, 0), 95, "");
+		success = system.addOrder(o4) && success;
+		success = system.assignRiderToOrder("987654321", "3004") && success;
+		o4.setOrderStatus("on the way");
+		
+		Order o5 = new Order("3005", "1005", system.findRestaurantByCode("2006"), "2006", "000",
+				new MyDate(13, 5, 2026), new MyDate(13, 5, 2026), 220, "");
+		success = system.addOrder(o5) && success;
+		success = system.assignRiderToOrder("456789123", "3005") && success;
+		o5.setOrderStatus("delivered");
+		system.findRiderById("456789123").setAvailable(true);
+		
+		Order o6 = new Order("3006", "1001", system.findRestaurantByCode("2021"), "2021", "000",
+				new MyDate(14, 5, 2026), new MyDate(0, 0, 0), 180, "");
+		success = system.addOrder(o6) && success;
+		success = system.assignRiderToOrder("456789123", "3006") && success;
+		
+		
+		Order o7 = new Order("3007", "1002", system.findRestaurantByCode("2011"), "2011", "000",
+				new MyDate(14, 5, 2026), new MyDate(0, 0, 0), 75, "");
+		success = system.addOrder(o7) && success;
+		success = system.assignRiderToOrder("987654321", "3007") && success;
+		o7.setOrderStatus("on the way");
+		
+		Order o8 = new Order("3008", "1001", system.findRestaurantByCode("2001"), "2001", "000",
+				new MyDate(15, 5, 2026), new MyDate(0, 0, 0), 95, "");
+		success = system.addOrder(o8) && success;
+
+		Order o9 = new Order("3009", "1006", system.findRestaurantByCode("2023"), "2023", "000",
+				new MyDate(15, 5, 2026), new MyDate(0, 0, 0), 250, "");
+		success = system.addOrder(o9) && success;
+
+		Order o10 = new Order("3010", "1002", system.findRestaurantByCode("2003"), "2003", "000",
+				new MyDate(16, 5, 2026), new MyDate(0, 0, 0), 120, "");
+		success = system.addOrder(o10) && success;
 		return success;
 	}
 
@@ -228,7 +258,7 @@ public class Main {
 					+ "1: Add customer\n2: Add restaurant admin\n3: Assign admin to restaurant\n4: Add restaurant\n"
 					+ "5: Add rider\n6: Assign rider to order\n7: View all orders\n"
 					+ "8:Show customer with most orders\n9:Show rider with most deliveries\n10:Update restaurant status\n"
-					+ "0: go back");
+					+ "11: Sort and display data\n0: go back");
 			if (input.hasNextInt()) {
 				adminChoice = input.nextInt();
 			} else {
@@ -275,7 +305,9 @@ public class Main {
 			case 10:
 				updateRestaurantStatusFromInput(input, system);
 				break;
-
+			case 11:
+				sortAndDisplayData(system);
+				break;
 			case 0:
 				break;
 
@@ -1051,7 +1083,7 @@ public class Main {
 		}
 		Restaurant restaurant = system.findRestaurantByCode(restaurantCode);
 		Order order = new Order(orderCode, loggedCustomer.getCustomerCode(), restaurant, restaurantCode, "000",
-				orderDate, new MyDate(0, 0, 0), baseAmount, "sent");
+				orderDate, new MyDate(0, 0, 0), baseAmount, "");
 		double finalPrice = order.getFinalPrice();
 		if (loggedCustomer.getRefundBalance() < finalPrice) {
 			System.out.println("Not enough refund balance");
@@ -1283,6 +1315,7 @@ public class Main {
 				break;
 			case 3:
 				updateCustomerEmail(input, system, loggedCustomer);
+				break;
 			case 0:
 				break;
 			default:
@@ -1531,5 +1564,25 @@ public class Main {
 		loggedCustomer.setRefundBalance(loggedCustomer.getRefundBalance() - amount);
 		System.out.println("Money withdrawn successfully.");
 		System.out.println("Current balance: " + loggedCustomer.getRefundBalance());
+	}
+	public static void sortAndDisplayData(DeliveryDataBase system) {
+		System.out.println("Customer sorted by refund palance: ");
+		ArrayList<Customer> customers = new ArrayList<Customer> (system.getCustomers());
+		Collections.sort(customers);
+		for(Customer c : customers) {
+			System.out.println(c);
+		}
+		System.out.println("\nRestaurants sorted by rating: ");
+		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant> (system.getRestaurants());
+		Collections.sort(restaurants , new RestaurantComparator());
+		for(Restaurant r : restaurants) {
+			System.out.println(r);
+		}
+		System.out.println("\nOrders sorted by final price: ");
+		ArrayList<Order> orders = new ArrayList<Order> (system.getOrders());
+		Collections.sort(orders , new OrderComparator());
+		for(Order r : orders) {
+			System.out.println(r);
+		}
 	}
 }

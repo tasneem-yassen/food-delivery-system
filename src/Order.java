@@ -144,6 +144,10 @@ public class Order {
 			return false; 
 		}
 		orderStatus = orderStatus.trim();
+		if(orderStatus.equals("")) {
+			this.orderStatus = orderStatus;
+			return true; 
+		}
 		//check if the order status is one of the 3 options allowed 
 		if(orderStatus.equalsIgnoreCase("sent") ||
 				orderStatus.equalsIgnoreCase("on the way") ||

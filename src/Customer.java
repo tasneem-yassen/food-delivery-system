@@ -1,4 +1,4 @@
-public class Customer {
+public class Customer implements Comparable<Customer> {
 	private String customerCode;
 	private String firstName;
 	private String familyName;
@@ -121,5 +121,9 @@ public class Customer {
 		Customer other = (Customer)obj;
 		return this.customerCode.equals(other.customerCode);
 	}
-	
+//////////////comparable function implementation///////
+	@Override
+	public int compareTo(Customer other) {
+		return Double.compare(other.refundBalance, this.refundBalance);
+	}
 }
