@@ -258,7 +258,7 @@ public class Main {
 					+ "1: Add customer\n2: Add restaurant admin\n3: Assign admin to restaurant\n4: Add restaurant\n"
 					+ "5: Add rider\n6: Assign rider to order\n7: View all orders\n"
 					+ "8:Show customer with most orders\n9:Show rider with most deliveries\n10:Update restaurant status\n"
-					+ "11: Sort and display data\n0: go back");
+					+ "11: Sort and display data\n12: 12: Advanced reports\n0: go back");
 			if (input.hasNextInt()) {
 				adminChoice = input.nextInt();
 			} else {
@@ -307,6 +307,9 @@ public class Main {
 				break;
 			case 11:
 				sortAndDisplayData(system);
+				break;
+			case 12:
+				sortAndDisplayLambdaData(system);
 				break;
 			case 0:
 				break;
@@ -1568,21 +1571,47 @@ public class Main {
 	public static void sortAndDisplayData(DeliveryDataBase system) {
 		System.out.println("Customer sorted by refund palance: ");
 		ArrayList<Customer> customers = new ArrayList<Customer> (system.getCustomers());
-		Collections.sort(customers);
-		for(Customer c : customers) {
-			System.out.println(c);
-		}
+		customers.sort(Customer::compareTo);/////////////////////////////////////////////////////////3
+		customers.forEach(System.out::println);///////////////////////////////////////////////////3
 		System.out.println("\nRestaurants sorted by rating: ");
 		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant> (system.getRestaurants());
 		Collections.sort(restaurants , new RestaurantComparator());
-		for(Restaurant r : restaurants) {
-			System.out.println(r);
-		}
+		restaurants.forEach(System.out::println);
 		System.out.println("\nOrders sorted by final price: ");
 		ArrayList<Order> orders = new ArrayList<Order> (system.getOrders());
 		Collections.sort(orders , new OrderComparator());
 		for(Order r : orders) {
 			System.out.println(r);
+		}
+	}
+	public static void sortAndDisplayLambdaData(DeliveryDataBase system) {
+		System.out.println("Riders sorted by order count: ");
+		ArrayList<Rider> riders = new ArrayList<Rider>(system.getRiders());
+		riders.sort((r1,r2) -> 
+		Integer.compare(r2.getOrderCount(), r1.getOrderCount()));
+		for(Rider r : riders) {
+			System.out.println(r);
+		}
+		System.out.println("\nCustomers sorted by first name: ");
+		ArrayList<Customer> customers = new ArrayList<Customer>(system.getCustomers());
+		customers.sort((c1,c2) -> 
+		c1.getFirstName().compareTo(c2.getFirstName()));
+		for(Customer c : customers) {
+			System.out.println(c);
+		}
+		System.out.println("\nOrders sorted by date: ");
+		ArrayList<Order> orders = new ArrayList<Order>(system.getOrders());
+		orders.sort((o1,o2) -> {
+			if(o1.getOrderDate().equals(o2.getOrderDate())) {
+				return 0 ; 
+			}
+			if(o1.getOrderDate().isBefore(o2.getOrderDate())) {
+				return -1;
+			}
+			return 1 ;
+		});
+		for(Order o : orders) {
+			System.out.println(o);
 		}
 	}
 }
