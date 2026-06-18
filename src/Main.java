@@ -115,7 +115,7 @@ public class Main {
 				&& success;
 		success = system.addRestaurant(
 				new FastFoodRestaurant("2016", "Chicken Rush", "Fast Food", 4.3, true, 13, 14, 5)) && success;
-		success = system.addRestaurant(new FastFoodRestaurant("2017", "Wrap & Go", "Street Food", 4.1, true, 11, 9, 4))
+		success = system.addRestaurant(new FastFoodRestaurant("2017", "Wrap and Go", "Street Food", 4.1, true, 11, 9, 4))
 				&& success;
 		success = system.addRestaurant(new FastFoodRestaurant("2018", "Snack Attack", "Snacks", 3.9, true, 7, 6, 2))
 				&& success;
@@ -253,12 +253,14 @@ public class Main {
 		if (exitFlag) {
 			return;
 		}
-		while (adminChoice != 0) {
+		while (adminChoice != 0) {///////////////////////
 			System.out.println("Welcome admin\nPlease choose action:\n"
 					+ "1: Add customer\n2: Add restaurant admin\n3: Assign admin to restaurant\n4: Add restaurant\n"
 					+ "5: Add rider\n6: Assign rider to order\n7: View all orders\n"
 					+ "8:Show customer with most orders\n9:Show rider with most deliveries\n10:Update restaurant status\n"
-					+ "11: Sort and display data\n12: 12: Advanced reports\n0: go back");
+					+ "11: Sort and display data\n12: Advanced reports\n"
+					+ "13: View stream reports\n14: Customers with balance above 100\n"
+					+ "0: go back");
 			if (input.hasNextInt()) {
 				adminChoice = input.nextInt();
 			} else {
@@ -306,10 +308,26 @@ public class Main {
 				updateRestaurantStatusFromInput(input, system);
 				break;
 			case 11:
-				sortAndDisplayData(system);
+				sortAndDisplayData(system);////////////////////////////////////////
 				break;
 			case 12:
-				sortAndDisplayLambdaData(system);
+				sortAndDisplayLambdaData(system);////////////////////////////////////////////
+				break;
+			case 13:///////////////////////////////////////
+				System.out.println("The number of currently open restaurants: ");
+				System.out.println(StreamReports.countOpenRestaurants(system));
+				System.out.println("\nCurrently open restaurants: ");
+				StreamReports.showOpenRestaurants(system);
+				System.out.println("\nPremium restaurants: ");
+				StreamReports.showPremiumRestaurants(system);
+				System.out.println("\nAvailable riders: ");
+				StreamReports.showAvailableRiders(system);
+				System.out.println("\nTotal revenue: ");
+				System.out.println(StreamReports.calculateTotalRevenue(system));
+				break;
+			case 14: //////////////////////////////////////////////////////////
+				System.out.println("Customers with refund balance higher than 100: ");
+				PredicateReports.showCustomersWithHighBalance(system);
 				break;
 			case 0:
 				break;
@@ -347,11 +365,11 @@ public class Main {
 		if (exitFlag) {
 			return;
 		}
-		while (adminChoice != 0) {
+		while (adminChoice != 0) {//////////////////////////////////////////////////////////////
 			System.out.println("Welcome restaurant admin\nPlease choose action:\n"
 					+ "1: Add customer\n2: Add order\n3: Add rider\n"
 					+ "4: Assign rider to order\n5: Show orders by restaurant\n"
-					+ "6: Show open Restaurants by cuisine\n0: go back");
+					+ "6: Show open Restaurants by cuisine\n7: View stream reports\n0: go back");
 			if (input.hasNextInt()) {
 				adminChoice = input.nextInt();
 			} else {
@@ -381,6 +399,14 @@ public class Main {
 			case 6:
 				printOpenRestaurantsByCuisineFromInput(input, system);
 				break;
+			case 7://////////////////////////////////////////////
+				System.out.println("Open restaurants: ");
+				StreamReports.showOpenRestaurants(system);
+				System.out.println("Premium restaurants: ");
+				StreamReports.showPremiumRestaurants(system);
+				System.out.println("Available riders: ");
+				StreamReports.showAvailableRiders(system);
+				break; 
 			case 0:
 				break;
 
@@ -473,7 +499,8 @@ public class Main {
 			System.out.println("1: add new order\n2: show all orders\n3: show restaurant info by code"
 					+ "\n4: update personal info\n5: show restaurants ordered from\n"
 					+ "6: show premium restaurants ordered from\n7: show balance\n"
-					+ "8: load money\n9: withdraw money\n0: go back");
+					+ "8: load money\n9: withdraw money\n10: View restaurant stream reports\n"
+					+ "0: go back"); ////////////////////////////////////////////////////////
 			if (input.hasNextInt()) {
 				customerChoice = input.nextInt();
 			} else {
@@ -509,6 +536,12 @@ public class Main {
 			case 9:
 				withdrawMoneyFromCustomer(input, loggedCustomer);
 				break;
+			case 10://////////////////////////////////////////////////////////////////
+				System.out.println("Open restaurants: ");
+				StreamReports.showOpenRestaurants(system);
+				System.out.println("Premium restaurants: ");
+				StreamReports.showPremiumRestaurants(system);
+				break; 
 			case 0:
 				break;
 
@@ -932,10 +965,12 @@ public class Main {
 			customerCode = input.next();
 			if (!InputValidation.isNotEmpty(customerCode) || !InputValidation.isOnlyDigits(customerCode)) {
 				System.out.println("Invalid customer code, try again: ");
-			} else if (system.findCustomerByCode(customerCode) == null) {
-				System.out.println("customer doesnt exists.");
-			} else {
+				continue; /////////////////////
+			} try {/////////////////////////////////////////////////////////////////////////////////////////////////
+				system.getCustomerOrThrow(customerCode);
 				break;
+			}catch(CustomerNotFoundException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		while (true) {
@@ -997,18 +1032,25 @@ public class Main {
 		}
 		Restaurant restaurant = system.findRestaurantByCode(restaurantCode);
 		Order order = new Order(orderCode, customerCode, restaurant, restaurantCode, "000", orderDate,
-				new MyDate(0, 0, 0), baseAmount, "sent");
+				new MyDate(0, 0, 0), baseAmount, "");
 		Customer customer = system.findCustomerByCode(customerCode);
-		double finalPrice = order.getFinalPrice();
-		if (customer.getRefundBalance() < finalPrice) {
-			System.out.println("Not enough refund balance");
-			return;
+		double finalPrice = order.getFinalPrice();  ///////////////////////////////////////////////////////////////////
+		try {
+			if (customer.getRefundBalance() < finalPrice) {
+				throw new InsufficientBalanceException(
+						"Not enough refund balance");
+			}
+			customer.setRefundBalance(customer.getRefundBalance() - finalPrice);
+			if (system.addOrder(order)) {
+				System.out.println("Order added successfully. Code: " + orderCode);
+			}else {
+				System.out.println("Could not add order");
+			}
+		}catch(InsufficientBalanceException e) {
+			System.out.println(e.getMessage());
 		}
-		customer.setRefundBalance(customer.getRefundBalance() - finalPrice);
-		if (system.addOrder(order)) {
-			System.out.println("Order added successfully. Code: " + orderCode);
-		} else {
-			System.out.println("Could not add order");
+		finally {
+			System.out.println("Order process finished.");
 		}
 	}
 
@@ -1034,11 +1076,15 @@ public class Main {
 			restaurantCode = input.next();
 			if (!InputValidation.isNotEmpty(restaurantCode) || !InputValidation.isOnlyDigits(restaurantCode)) {
 				System.out.println("Invalid restaurant code, try again: ");
-			} else if (system.findRestaurantByCode(restaurantCode) == null) {
-				System.out.println("restaurant doesnt exists.");
-			} else {
+				continue; 
+			}  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+			try {
+				system.getRestaurantOrThrow(restaurantCode);
 				break;
+			}catch(RestaurantNotFoundException e) {
+				System.out.println(e.getMessage());
 			}
+			
 		}
 		System.out.println("Please enter the date of your order: ");
 		MyDate orderDate;
@@ -1569,6 +1615,7 @@ public class Main {
 		System.out.println("Current balance: " + loggedCustomer.getRefundBalance());
 	}
 	public static void sortAndDisplayData(DeliveryDataBase system) {
+		//this method sorts and displays the data using comparator / comparable 
 		System.out.println("Customer sorted by refund palance: ");
 		ArrayList<Customer> customers = new ArrayList<Customer> (system.getCustomers());
 		customers.sort(Customer::compareTo);/////////////////////////////////////////////////////////3
@@ -1585,6 +1632,7 @@ public class Main {
 		}
 	}
 	public static void sortAndDisplayLambdaData(DeliveryDataBase system) {
+		//this method sorts and displays the data using lambda methods
 		System.out.println("Riders sorted by order count: ");
 		ArrayList<Rider> riders = new ArrayList<Rider>(system.getRiders());
 		riders.sort((r1,r2) -> 
@@ -1614,4 +1662,6 @@ public class Main {
 			System.out.println(o);
 		}
 	}
+	
+	
 }

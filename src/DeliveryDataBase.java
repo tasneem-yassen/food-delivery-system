@@ -551,4 +551,23 @@ public class DeliveryDataBase {
 		totalPaidByCustomer.put(customerCode, currentTotal + amount);
 		return true;
 	}
+	
+	public Customer getCustomerOrThrow(String code) throws CustomerNotFoundException {
+		// this method throws CustomerNotFoundException if no customer exists with the given code
+		Customer customer = findCustomerByCode(code);
+		if(customer == null) {
+			throw new CustomerNotFoundException(
+					"Customer with code: "+ code + " was not found");
+		}
+		return customer; 
+	}
+	public Restaurant getRestaurantOrThrow(String code) throws RestaurantNotFoundException {
+		// this method throws RestaurantNotFoundException if no restaurant exists with the given code 
+		Restaurant restaurant = findRestaurantByCode(code);
+		if(restaurant == null) {
+			throw new RestaurantNotFoundException(
+				 "Restaurant with code: "+ code + " was not found");
+		}
+		return restaurant; 
+	}
 }
