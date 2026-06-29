@@ -18,7 +18,7 @@ public class Rider {
 		setVehicle(vehicle);
 		setAvailable(isAvailable); 
 		if(!setOrders(orders)) {
-			this.orders = new ArrayList<Order>();
+	  		this.orders = new ArrayList<Order>();
 			this.orderCount = 0; 
 		}
 	}

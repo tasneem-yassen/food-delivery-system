@@ -253,7 +253,7 @@ public class Main {
 		if (exitFlag) {
 			return;
 		}
-		while (adminChoice != 0) {///////////////////////
+		while (adminChoice != 0) {
 			System.out.println("Welcome admin\nPlease choose action:\n"
 					+ "1: Add customer\n2: Add restaurant admin\n3: Assign admin to restaurant\n4: Add restaurant\n"
 					+ "5: Add rider\n6: Assign rider to order\n7: View all orders\n"
@@ -308,12 +308,12 @@ public class Main {
 				updateRestaurantStatusFromInput(input, system);
 				break;
 			case 11:
-				sortAndDisplayData(system);////////////////////////////////////////
+				sortAndDisplayData(system);
 				break;
 			case 12:
-				sortAndDisplayLambdaData(system);////////////////////////////////////////////
+				sortAndDisplayLambdaData(system);
 				break;
-			case 13:///////////////////////////////////////
+			case 13:
 				System.out.println("The number of currently open restaurants: ");
 				System.out.println(StreamReports.countOpenRestaurants(system));
 				System.out.println("\nCurrently open restaurants: ");
@@ -325,7 +325,7 @@ public class Main {
 				System.out.println("\nTotal revenue: ");
 				System.out.println(StreamReports.calculateTotalRevenue(system));
 				break;
-			case 14: //////////////////////////////////////////////////////////
+			case 14: 
 				System.out.println("Customers with refund balance higher than 100: ");
 				PredicateReports.showCustomersWithHighBalance(system);
 				break;
@@ -365,7 +365,7 @@ public class Main {
 		if (exitFlag) {
 			return;
 		}
-		while (adminChoice != 0) {//////////////////////////////////////////////////////////////
+		while (adminChoice != 0) {
 			System.out.println("Welcome restaurant admin\nPlease choose action:\n"
 					+ "1: Add customer\n2: Add order\n3: Add rider\n"
 					+ "4: Assign rider to order\n5: Show orders by restaurant\n"
@@ -399,7 +399,7 @@ public class Main {
 			case 6:
 				printOpenRestaurantsByCuisineFromInput(input, system);
 				break;
-			case 7://////////////////////////////////////////////
+			case 7:
 				System.out.println("Open restaurants: ");
 				StreamReports.showOpenRestaurants(system);
 				System.out.println("Premium restaurants: ");
@@ -500,7 +500,7 @@ public class Main {
 					+ "\n4: update personal info\n5: show restaurants ordered from\n"
 					+ "6: show premium restaurants ordered from\n7: show balance\n"
 					+ "8: load money\n9: withdraw money\n10: View restaurant stream reports\n"
-					+ "0: go back"); ////////////////////////////////////////////////////////
+					+ "0: go back"); 
 			if (input.hasNextInt()) {
 				customerChoice = input.nextInt();
 			} else {
@@ -536,7 +536,7 @@ public class Main {
 			case 9:
 				withdrawMoneyFromCustomer(input, loggedCustomer);
 				break;
-			case 10://////////////////////////////////////////////////////////////////
+			case 10:
 				System.out.println("Open restaurants: ");
 				StreamReports.showOpenRestaurants(system);
 				System.out.println("Premium restaurants: ");
@@ -965,8 +965,8 @@ public class Main {
 			customerCode = input.next();
 			if (!InputValidation.isNotEmpty(customerCode) || !InputValidation.isOnlyDigits(customerCode)) {
 				System.out.println("Invalid customer code, try again: ");
-				continue; /////////////////////
-			} try {/////////////////////////////////////////////////////////////////////////////////////////////////
+				continue;
+			} try {
 				system.getCustomerOrThrow(customerCode);
 				break;
 			}catch(CustomerNotFoundException e) {
@@ -1034,7 +1034,7 @@ public class Main {
 		Order order = new Order(orderCode, customerCode, restaurant, restaurantCode, "000", orderDate,
 				new MyDate(0, 0, 0), baseAmount, "");
 		Customer customer = system.findCustomerByCode(customerCode);
-		double finalPrice = order.getFinalPrice();  ///////////////////////////////////////////////////////////////////
+		double finalPrice = order.getFinalPrice();  
 		try {
 			if (customer.getRefundBalance() < finalPrice) {
 				throw new InsufficientBalanceException(
@@ -1618,8 +1618,8 @@ public class Main {
 		//this method sorts and displays the data using comparator / comparable 
 		System.out.println("Customer sorted by refund palance: ");
 		ArrayList<Customer> customers = new ArrayList<Customer> (system.getCustomers());
-		customers.sort(Customer::compareTo);/////////////////////////////////////////////////////////3
-		customers.forEach(System.out::println);///////////////////////////////////////////////////3
+		customers.sort(Customer::compareTo);
+		customers.forEach(System.out::println);
 		System.out.println("\nRestaurants sorted by rating: ");
 		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant> (system.getRestaurants());
 		Collections.sort(restaurants , new RestaurantComparator());
